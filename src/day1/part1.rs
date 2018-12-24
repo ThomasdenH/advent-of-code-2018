@@ -1,11 +1,12 @@
-use std::fs::File;
-use std::io::{BufReader, BufRead};
 use std::error::Error;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 fn solution() -> Result<i32, Box<dyn Error>> {
     let input = File::open("./src/day1/input.txt")?;
     let buffered = BufReader::new(input);
-    Ok(buffered.lines()
+    Ok(buffered
+        .lines()
         .map(|line| line.unwrap().trim().parse::<i32>().unwrap())
         .sum())
 }

@@ -1,12 +1,13 @@
-use std::fs::File;
-use std::io::{BufReader, BufRead};
-use std::error::Error;
 use std::collections::HashSet;
+use std::error::Error;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 fn solution() -> Result<i32, Box<dyn Error>> {
     let input = File::open("./src/day1/input.txt")?;
     let buffered = BufReader::new(input);
-    let changes = buffered.lines()
+    let changes = buffered
+        .lines()
         .map(|line| line.unwrap().trim().parse::<i32>().unwrap())
         .collect::<Vec<_>>();
     let mut set = HashSet::new();
@@ -15,7 +16,7 @@ fn solution() -> Result<i32, Box<dyn Error>> {
         for change in &changes {
             total += change;
             if set.contains(&total) {
-                return Ok(total)
+                return Ok(total);
             } else {
                 set.insert(total);
             }

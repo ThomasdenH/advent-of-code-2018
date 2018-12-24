@@ -1,6 +1,6 @@
-use std::fs::File;
-use std::io::{BufReader, BufRead};
 use std::error::Error;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 fn checksum(id: String) -> (bool, bool) {
     let mut frequencies = [0; 26];
@@ -16,7 +16,7 @@ fn checksum(id: String) -> (bool, bool) {
 fn to_binary_digit(b: bool) -> u32 {
     match b {
         true => 1,
-        false => 0
+        false => 0,
     }
 }
 
