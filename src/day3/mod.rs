@@ -1,7 +1,7 @@
 use core::num::ParseIntError;
 use std::str::FromStr;
 
-mod part1;
+pub mod part1;
 mod part2;
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy)]
