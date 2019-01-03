@@ -1,13 +1,10 @@
 #![forbid(unsafe_code)]
 
-#[cfg(test)]
+use aoc_runner_derive::*;
+
 mod day1;
-
-#[cfg(test)]
 mod day2;
-
-#[cfg(test)]
 mod day3;
-
-#[cfg(test)]
 mod day4;
+
+aoc_lib!{ year = 2018 }
