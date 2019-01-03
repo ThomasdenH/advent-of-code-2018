@@ -1,6 +1,6 @@
-use core::str::FromStr;
-use core::num::ParseIntError;
 use aoc_runner_derive::*;
+use core::num::ParseIntError;
+use core::str::FromStr;
 use std::collections::HashMap;
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy)]
@@ -55,7 +55,8 @@ fn test_claim_parse() {
 
 #[aoc_generator(day3)]
 fn input_frequencies(input: &str) -> Vec<Claim> {
-    input.lines()
+    input
+        .lines()
         .map(|s| s.parse::<Claim>().unwrap())
         .collect::<Vec<Claim>>()
 }

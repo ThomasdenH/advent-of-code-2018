@@ -25,7 +25,8 @@ fn to_binary_digit(b: bool) -> u32 {
 
 #[aoc(day2, part1)]
 pub fn part1(input: &Vec<String>) -> u32 {
-    let (a, b) = input.iter()
+    let (a, b) = input
+        .iter()
         .map(|a| checksum(a))
         .map(|(a, b)| (to_binary_digit(a), to_binary_digit(b)))
         .fold((0, 0), |acc, x| (acc.0 + x.0, acc.1 + x.1));

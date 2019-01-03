@@ -7,7 +7,8 @@ mod log;
 
 #[aoc_generator(day4)]
 fn input_frequencies(input: &str) -> Vec<LogEntry> {
-    input.lines()
+    input
+        .lines()
         .map(|line| line.parse::<LogEntry>().unwrap())
         .collect()
 }
@@ -81,7 +82,6 @@ fn part1(entries: &Vec<LogEntry>) -> u32 {
 
     u32::from(max_minute) * guard_most_minutes_asleep
 }
-
 
 #[aoc(day4, part2)]
 fn part2(entries: &Vec<LogEntry>) -> u32 {
