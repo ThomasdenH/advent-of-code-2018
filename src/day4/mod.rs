@@ -1,3 +1,4 @@
 mod date;
 mod log;
-pub mod part1;
+mod part1;
+mod part2;
