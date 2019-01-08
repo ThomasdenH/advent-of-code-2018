@@ -5,7 +5,7 @@ struct Polymer(String);
 fn char_reduces_with(c1: char, c2: Option<&char>) -> bool {
     match c2 {
         Some(&c2) => c1.to_ascii_lowercase() == c2.to_ascii_lowercase() && c1 != c2,
-        None => false
+        None => false,
     }
 }
 
@@ -21,7 +21,7 @@ impl Polymer {
                 reduced.pop();
             } else {
                 reduced.push(c);
-            }            
+            }
         }
         reduced.len()
     }
@@ -53,7 +53,7 @@ fn part1(input: &Polymer) -> usize {
 
 #[aoc(day5, part2)]
 fn part2(input: &Polymer) -> usize {
-    (b'a' ..= b'z')
+    (b'a'..=b'z')
         .map(char::from)
         .map(|c| input.reduced_len_without(c))
         .min()
