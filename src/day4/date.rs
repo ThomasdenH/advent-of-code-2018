@@ -8,7 +8,7 @@ pub struct Date {
 }
 
 impl Date {
-    pub fn minutes_diff(&self, other: &Date) -> u8 {
+    pub fn minutes_diff(self, other: Date) -> u8 {
         assert_eq!(self.year, other.year);
         assert_eq!(self.month, other.month);
         assert_eq!(self.day, other.day);

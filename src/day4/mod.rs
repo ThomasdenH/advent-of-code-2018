@@ -6,7 +6,7 @@ mod date;
 mod log;
 
 #[aoc_generator(day4)]
-fn input_frequencies(input: &str) -> Vec<LogEntry> {
+fn generator(input: &str) -> Vec<LogEntry> {
     input
         .lines()
         .map(|line| line.parse::<LogEntry>().unwrap())
@@ -14,8 +14,8 @@ fn input_frequencies(input: &str) -> Vec<LogEntry> {
 }
 
 #[aoc(day4, part1)]
-fn part1(entries: &Vec<LogEntry>) -> u32 {
-    let mut entries = entries.clone();
+fn part1(entries: &[LogEntry]) -> u32 {
+    let mut entries = entries.to_vec();
     entries.sort_by(|a, b| a.date.cmp(&b.date));
 
     let mut date_start = None;
@@ -29,7 +29,7 @@ fn part1(entries: &Vec<LogEntry>) -> u32 {
         } else if entry.log_type == LogEntryType::FallsAsleep {
             date_start = Some(entry.date);
         } else {
-            let curr_minutes_asleep = u32::from(entry.date.minutes_diff(&date_start.unwrap()));
+            let curr_minutes_asleep = u32::from(entry.date.minutes_diff(date_start.unwrap()));
             let guard = current_guard.expect("No current guard");
             minutes_asleep.insert(
                 guard,
@@ -84,8 +84,8 @@ fn part1(entries: &Vec<LogEntry>) -> u32 {
 }
 
 #[aoc(day4, part2)]
-fn part2(entries: &Vec<LogEntry>) -> u32 {
-    let mut entries = entries.clone();
+fn part2(entries: &[LogEntry]) -> u32 {
+    let mut entries = entries.to_vec();
     entries.sort_by(|a, b| a.date.cmp(&b.date));
 
     let mut guard_minute_count: HashMap<(u32, u8), u32> = HashMap::new();
@@ -115,4 +115,67 @@ fn part2(entries: &Vec<LogEntry>) -> u32 {
         .unwrap()
         .0;
     guard * u32::from(*minute)
+}
+
+#[test]
+fn test_part1_example() {
+    let input_string = "[1518-11-01 00:00] Guard #10 begins shift\n\
+                        [1518-11-01 00:05] falls asleep\n\
+                        [1518-11-01 00:25] wakes up\n\
+                        [1518-11-01 00:30] falls asleep\n\
+                        [1518-11-01 00:55] wakes up\n\
+                        [1518-11-01 23:58] Guard #99 begins shift\n\
+                        [1518-11-02 00:40] falls asleep\n\
+                        [1518-11-02 00:50] wakes up\n\
+                        [1518-11-03 00:05] Guard #10 begins shift\n\
+                        [1518-11-03 00:24] falls asleep\n\
+                        [1518-11-03 00:29] wakes up\n\
+                        [1518-11-04 00:02] Guard #99 begins shift\n\
+                        [1518-11-04 00:36] falls asleep\n\
+                        [1518-11-04 00:46] wakes up\n\
+                        [1518-11-05 00:03] Guard #99 begins shift\n\
+                        [1518-11-05 00:45] falls asleep\n\
+                        [1518-11-05 00:55] wakes up\n";
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 240);
+}
+
+#[test]
+fn test_part1() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day4.txt");
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 73646);
+}
+#[test]
+fn test_part2_example() {
+    let input_string = "[1518-11-01 00:00] Guard #10 begins shift\n\
+                        [1518-11-01 00:05] falls asleep\n\
+                        [1518-11-01 00:25] wakes up\n\
+                        [1518-11-01 00:30] falls asleep\n\
+                        [1518-11-01 00:55] wakes up\n\
+                        [1518-11-01 23:58] Guard #99 begins shift\n\
+                        [1518-11-02 00:40] falls asleep\n\
+                        [1518-11-02 00:50] wakes up\n\
+                        [1518-11-03 00:05] Guard #10 begins shift\n\
+                        [1518-11-03 00:24] falls asleep\n\
+                        [1518-11-03 00:29] wakes up\n\
+                        [1518-11-04 00:02] Guard #99 begins shift\n\
+                        [1518-11-04 00:36] falls asleep\n\
+                        [1518-11-04 00:46] wakes up\n\
+                        [1518-11-05 00:03] Guard #99 begins shift\n\
+                        [1518-11-05 00:45] falls asleep\n\
+                        [1518-11-05 00:55] wakes up\n";
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 4455);
+}
+
+#[test]
+fn test_part2() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day4.txt");
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 4727);
 }

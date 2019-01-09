@@ -1,10 +1,10 @@
 use aoc_runner_derive::*;
 
 #[aoc_generator(day8)]
-fn input_frequencies(input: &str) -> Vec<u32> {
+fn generator(input: &str) -> Vec<u32> {
     input
-        .split(" ")
-        .map(|i| i.parse::<u32>().unwrap())
+        .split(' ')
+        .map(|i| i.trim().parse::<u32>().unwrap())
         .collect()
 }
 
@@ -14,11 +14,11 @@ struct Node {
 }
 
 impl Node {
-    fn read_node<'a>(iter: &mut impl Iterator<Item = u32>) -> Node {
-        let child_count = iter.next().unwrap();
-        let metadata_count = iter.next().unwrap();
+    fn read_node(iter: &mut Iterator<Item = &u32>) -> Node {
+        let child_count = *iter.next().unwrap();
+        let metadata_count = *iter.next().unwrap();
         let child_nodes = (0..child_count).map(|_| Node::read_node(iter)).collect();
-        let metadata = (0..metadata_count).map(|_| iter.next().unwrap()).collect();
+        let metadata = (0..metadata_count).map(|_| *iter.next().unwrap()).collect();
         Node {
             child_nodes,
             metadata,
@@ -45,17 +45,39 @@ impl Node {
 }
 
 #[test]
+fn test_sum_sum_metadata() {
+    let input = generator("2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2");
+    assert_eq!(Node::read_node(&mut input.iter()).sum_metadata(), 138)
+}
+
+#[test]
 fn test_value() {
-    let input = input_frequencies("2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2");
-    assert_eq!(Node::read_node(&mut input.iter().map(|i| *i)).value(), 66)
+    let input = generator("2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2");
+    assert_eq!(Node::read_node(&mut input.iter()).value(), 66)
 }
 
 #[aoc(day8, part1)]
-fn sum(input: &Vec<u32>) -> u32 {
-    Node::read_node(&mut input.iter().map(|i| *i)).sum_metadata()
+fn part1(input: &[u32]) -> u32 {
+    Node::read_node(&mut input.iter()).sum_metadata()
 }
 
 #[aoc(day8, part2)]
-fn value(input: &Vec<u32>) -> u32 {
-    Node::read_node(&mut input.iter().map(|i| *i)).value()
+fn part2(input: &[u32]) -> u32 {
+    Node::read_node(&mut input.iter()).value()
+}
+
+#[test]
+fn test_part1() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day8.txt");
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 41028);
+}
+
+#[test]
+fn test_part2() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day8.txt");
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 20849);
 }

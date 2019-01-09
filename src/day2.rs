@@ -1,7 +1,7 @@
 use aoc_runner_derive::*;
 
 #[aoc_generator(day2)]
-pub fn input_frequencies(input: &str) -> Vec<String> {
+pub fn generator(input: &str) -> Vec<String> {
     input.lines().map(|a| a.to_owned()).collect()
 }
 
@@ -17,14 +17,15 @@ fn checksum(id: &str) -> (bool, bool) {
 }
 
 fn to_binary_digit(b: bool) -> u32 {
-    match b {
-        true => 1,
-        false => 0,
+    if b {
+        1
+    } else {
+        0
     }
 }
 
 #[aoc(day2, part1)]
-pub fn part1(input: &Vec<String>) -> u32 {
+pub fn part1(input: &[String]) -> u32 {
     let (a, b) = input
         .iter()
         .map(|a| checksum(a))
@@ -34,7 +35,7 @@ pub fn part1(input: &Vec<String>) -> u32 {
 }
 
 #[aoc(day2, part2)]
-pub fn part2(input: &Vec<String>) -> String {
+pub fn part2(input: &[String]) -> String {
     for i in 0..input.len() {
         for j in 0..input.len() {
             if i == j {
@@ -61,4 +62,48 @@ pub fn part2(input: &Vec<String>) -> String {
         }
     }
     panic!("Solution not found!");
+}
+
+#[test]
+fn test_part1_example() {
+    let input_string = "abcdef\n\
+                        bababc\n\
+                        abbcde\n\
+                        abcccd\n\
+                        aabcdd\n\
+                        abcdee\n\
+                        ababab\n";
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 12);
+}
+
+#[test]
+fn test_part1() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day2.txt");
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 7776);
+}
+
+#[test]
+fn test_part2_example() {
+    let input_string = "abcde\n\
+                        fghij\n\
+                        klmno\n\
+                        pqrst\n\
+                        fguij\n\
+                        axcye\n\
+                        wvxyz\n";
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, "fgij");
+}
+
+#[test]
+fn test_part2() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day2.txt");
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, "wlkigsqyfecjqqmnxaktdrhbz");
 }

@@ -42,7 +42,7 @@ impl Polymer {
 }
 
 #[aoc_generator(day5)]
-fn input_frequencies(input: &str) -> Polymer {
+fn generator(input: &str) -> Polymer {
     Polymer::new(input.trim())
 }
 
@@ -58,4 +58,36 @@ fn part2(input: &Polymer) -> usize {
         .map(|c| input.reduced_len_without(c))
         .min()
         .unwrap()
+}
+
+#[test]
+fn test_part1() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day5.txt");
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 9386);
+}
+
+#[test]
+fn test_part1_example() {
+    let input_string = "dabAcCaCBAcCcaDA";
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 10);
+}
+
+#[test]
+fn test_part2() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day5.txt");
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 4876);
+}
+
+#[test]
+fn test_part2_example() {
+    let input_string = "dabAcCaCBAcCcaDA";
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 4);
 }

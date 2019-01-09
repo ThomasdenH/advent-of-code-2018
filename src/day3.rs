@@ -21,11 +21,11 @@ impl FromStr for Claim {
         let coord = parts[2]
             .split_at(parts[2].len() - 1)
             .0
-            .split(",")
+            .split(',')
             .collect::<Vec<_>>();
         let left = coord[0].parse::<u32>()?;
         let top = coord[1].parse::<u32>()?;
-        let size = parts[3].split("x").collect::<Vec<_>>();
+        let size = parts[3].split('x').collect::<Vec<_>>();
         let width = size[0].parse::<u32>()?;
         let height = size[1].parse::<u32>()?;
         Ok(Claim {
@@ -54,7 +54,7 @@ fn test_claim_parse() {
 }
 
 #[aoc_generator(day3)]
-fn input_frequencies(input: &str) -> Vec<Claim> {
+fn generator(input: &str) -> Vec<Claim> {
     input
         .lines()
         .map(|s| s.parse::<Claim>().unwrap())
@@ -62,7 +62,7 @@ fn input_frequencies(input: &str) -> Vec<Claim> {
 }
 
 #[aoc(day3, part1)]
-fn overlapping(claims: &Vec<Claim>) -> usize {
+fn part1(claims: &[Claim]) -> usize {
     let mut tiles: HashMap<(u32, u32), u32> = HashMap::new();
     for claim in claims {
         for x in claim.left..claim.left + claim.width {
@@ -82,16 +82,16 @@ fn overlapping(claims: &Vec<Claim>) -> usize {
 }
 
 #[test]
-fn test_overlapping() {
+fn test_part1_example() {
     let claims = vec!["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"]
         .iter()
         .map(|l| l.parse::<Claim>().unwrap())
-        .collect();
-    assert_eq!(overlapping(&claims), 4);
+        .collect::<Vec<Claim>>();
+    assert_eq!(part1(&claims), 4);
 }
 
 #[aoc(day3, part2)]
-fn non_overlapping(claims: &Vec<Claim>) -> u32 {
+fn part2(claims: &[Claim]) -> u32 {
     let mut tiles: HashMap<(u32, u32), u32> = HashMap::new();
     for claim in claims {
         for x in claim.left..claim.left + claim.width {
@@ -118,17 +118,33 @@ fn non_overlapping(claims: &Vec<Claim>) -> u32 {
                     }
                 }
             }
-            return true;
+            true
         })
         .unwrap()
         .id
 }
 
 #[test]
-fn test_non_overlapping() {
+fn test_part2_example() {
     let claims = vec!["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"]
         .iter()
         .map(|l| l.parse::<Claim>().unwrap())
-        .collect();
-    assert_eq!(non_overlapping(&claims), 3);
+        .collect::<Vec<_>>();
+    assert_eq!(part2(&claims), 3);
+}
+
+#[test]
+fn test_part1() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day3.txt");
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 107043);
+}
+
+#[test]
+fn test_part2() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day3.txt");
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 346);
 }

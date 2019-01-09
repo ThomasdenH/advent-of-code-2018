@@ -12,4 +12,4 @@ mod day7;
 mod day8;
 mod util;
 
-aoc_lib! { year = 2018 }
+aoc_main! { year = 2018 }

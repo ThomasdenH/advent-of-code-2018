@@ -4,7 +4,7 @@ use std::collections::VecDeque;
 use std::fmt;
 
 #[aoc_generator(day6)]
-fn parse_coords(input: &str) -> Vec<(u32, u32)> {
+fn generator(input: &str) -> Vec<(u32, u32)> {
     input
         .lines()
         .map(|line| {
@@ -94,7 +94,7 @@ struct QueueEntry {
 }
 
 #[aoc(day6, part1)]
-fn biggest_area(input: &Vec<(u32, u32)>) -> u32 {
+fn part1(input: &[(u32, u32)]) -> u32 {
     let min_x = *input.iter().map(|(x, _)| x).min().unwrap();
     let max_x = *input.iter().map(|(x, _)| x).max().unwrap();
     let min_y = *input.iter().map(|(_, y)| y).min().unwrap();
@@ -181,7 +181,11 @@ fn biggest_area(input: &Vec<(u32, u32)>) -> u32 {
 }
 
 #[aoc(day6, part2)]
-fn biggest_area_part2(input: &Vec<(u32, u32)>) -> u32 {
+fn part2(input: &[(u32, u32)]) -> u32 {
+    reagion_area_total_distance_less_than(input, 10_000)
+}
+
+fn reagion_area_total_distance_less_than(input: &[(u32, u32)], max_distance: u32) -> u32 {
     // A very inefficient but short method
     let min_x = *input.iter().map(|(a, _)| a).min().unwrap();
     let max_x = *input.iter().map(|(a, _)| a).max().unwrap();
@@ -189,14 +193,14 @@ fn biggest_area_part2(input: &Vec<(u32, u32)>) -> u32 {
     let max_y = *input.iter().map(|(_, a)| a).max().unwrap();
 
     let mut count = 0;
-    for x in (min_x as i32 - 10_000)..(max_x as i32 + 10_000) {
-        for y in (min_y as i32 - 10_000)..(max_y as i32 + 10_000) {
+    for x in (min_x as i32 - max_distance as i32)..(max_x as i32 + max_distance as i32) {
+        for y in (min_y as i32 - max_distance as i32)..(max_y as i32 + max_distance as i32) {
             let target = (x, y);
             if input
                 .iter()
                 .map(|coord| distance(target, (coord.0 as i32, coord.1 as i32)))
                 .sum::<u32>()
-                < 10_000
+                < max_distance
             {
                 count += 1;
             }
@@ -207,4 +211,46 @@ fn biggest_area_part2(input: &Vec<(u32, u32)>) -> u32 {
 
 fn distance(a: (i32, i32), b: (i32, i32)) -> u32 {
     (a.0 - b.0).abs() as u32 + (a.1 - b.1).abs() as u32
+}
+
+#[test]
+fn test_part1() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day6.txt");
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 4589);
+}
+
+#[test]
+fn test_part1_example() {
+    let input_string = "1, 1\n\
+                        1, 6\n\
+                        8, 3\n\
+                        3, 4\n\
+                        5, 5\n\
+                        8, 9";
+    let input = generator(&input_string);
+    let result = part1(&input);
+    assert_eq!(result, 17);
+}
+
+#[test]
+fn test_part2() {
+    let input_string = crate::util::read_file_to_string("./input/2018/day6.txt");
+    let input = generator(&input_string);
+    let result = part2(&input);
+    assert_eq!(result, 40252);
+}
+
+#[test]
+fn test_part2_example() {
+    let input_string = "1, 1\n\
+                        1, 6\n\
+                        8, 3\n\
+                        3, 4\n\
+                        5, 5\n\
+                        8, 9";
+    let input = generator(&input_string);
+    let result = reagion_area_total_distance_less_than(&input, 32);
+    assert_eq!(result, 16);
 }
