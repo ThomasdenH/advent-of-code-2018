@@ -181,35 +181,29 @@ fn part1(input: &[(u32, u32)]) -> u32 {
 }
 
 #[aoc(day6, part2)]
-fn part2(input: &[(u32, u32)]) -> u32 {
+fn part2(input: &[(u32, u32)]) -> usize {
     reagion_area_total_distance_less_than(input, 10_000)
 }
 
-fn reagion_area_total_distance_less_than(input: &[(u32, u32)], max_distance: u32) -> u32 {
-    // A very inefficient but short method
-    let min_x = *input.iter().map(|(a, _)| a).min().unwrap();
-    let max_x = *input.iter().map(|(a, _)| a).max().unwrap();
-    let min_y = *input.iter().map(|(_, a)| a).min().unwrap();
-    let max_y = *input.iter().map(|(_, a)| a).max().unwrap();
+fn reagion_area_total_distance_less_than(input: &[(u32, u32)], max_distance: u32) -> usize {
+    // An inefficient but short method
+    let min_x = i64::from(*input.iter().map(|(a, _)| a).min().unwrap());
+    let max_x = i64::from(*input.iter().map(|(a, _)| a).max().unwrap());
+    let min_y = i64::from(*input.iter().map(|(_, a)| a).min().unwrap());
+    let max_y = i64::from(*input.iter().map(|(_, a)| a).max().unwrap());
+    let padding = 1 + (i64::from(max_distance) - 1) / input.len() as i64;
 
-    let mut count = 0;
-    for x in (min_x as i32 - max_distance as i32)..(max_x as i32 + max_distance as i32) {
-        for y in (min_y as i32 - max_distance as i32)..(max_y as i32 + max_distance as i32) {
-            let target = (x, y);
-            if input
-                .iter()
-                .map(|coord| distance(target, (coord.0 as i32, coord.1 as i32)))
-                .sum::<u32>()
-                < max_distance
-            {
-                count += 1;
-            }
-        }
-    }
-    count
+    ((min_x - padding)..(max_x + padding)).into_iter()
+        .flat_map(|x| ((min_y - padding)..(max_y + padding))
+            .filter(move |y| input.iter()
+                .map(|coord| distance((x, *y), *coord))
+                .sum::<u32>() < max_distance)
+        ).count()
 }
 
-fn distance(a: (i32, i32), b: (i32, i32)) -> u32 {
+fn distance<T: Into<i64>, Y: Into<i64>>(a: (T, T), b: (Y, Y)) -> u32 {
+    let a = (a.0.into(), a.1.into());
+    let b = (b.0.into(), b.1.into());
     (a.0 - b.0).abs() as u32 + (a.1 - b.1).abs() as u32
 }
 
