@@ -138,7 +138,7 @@ fn test_part1() {
     let input_string = crate::util::read_file_to_string("./input/2018/day3.txt");
     let input = generator(&input_string);
     let result = part1(&input);
-    assert_eq!(result, 107043);
+    assert_eq!(result, 107_043);
 }
 
 #[test]

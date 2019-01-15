@@ -193,12 +193,17 @@ fn reagion_area_total_distance_less_than(input: &[(u32, u32)], max_distance: u32
     let max_y = i64::from(*input.iter().map(|(_, a)| a).max().unwrap());
     let padding = 1 + (i64::from(max_distance) - 1) / input.len() as i64;
 
-    ((min_x - padding)..(max_x + padding)).into_iter()
-        .flat_map(|x| ((min_y - padding)..(max_y + padding))
-            .filter(move |y| input.iter()
-                .map(|coord| distance((x, *y), *coord))
-                .sum::<u32>() < max_distance)
-        ).count()
+    ((min_x - padding)..(max_x + padding))
+        .flat_map(|x| {
+            ((min_y - padding)..(max_y + padding)).filter(move |y| {
+                input
+                    .iter()
+                    .map(|coord| distance((x, *y), *coord))
+                    .sum::<u32>()
+                    < max_distance
+            })
+        })
+        .count()
 }
 
 fn distance<T: Into<i64>, Y: Into<i64>>(a: (T, T), b: (Y, Y)) -> u32 {
