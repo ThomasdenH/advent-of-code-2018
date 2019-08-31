@@ -14,7 +14,7 @@ struct Node {
 }
 
 impl Node {
-    fn read_node(iter: &mut Iterator<Item = &u32>) -> Node {
+    fn read_node(iter: &mut dyn Iterator<Item = &u32>) -> Node {
         let child_count = *iter.next().unwrap();
         let metadata_count = *iter.next().unwrap();
         let child_nodes = (0..child_count).map(|_| Node::read_node(iter)).collect();

@@ -49,21 +49,20 @@ impl AreaOfIndexMap {
     }
 
     fn increase_by_one(&mut self, index: usize) {
-        match self.0.get(&index) {
-            None => {
-                self.0.insert(index, Area::Finite(1));
-            }
-            Some(Area::Finite(current_area)) => {
-                self.0.insert(index, Area::Finite(current_area + 1));
-            }
-            _ => {}
-        }
+        self.0
+            .entry(index)
+            .and_modify(|area| {
+                if let Area::Finite(ref mut current_area) = area {
+                    *current_area += 1;
+                }
+            })
+            .or_insert(Area::Finite(1));
     }
 
     fn decrease_by_one(&mut self, index: usize) {
-        match self.0.get(&index) {
-            Some(Area::Finite(current_area)) => {
-                self.0.insert(index, Area::Finite(current_area - 1));
+        match self.0.get_mut(&index) {
+            Some(Area::Finite(ref mut current_area)) => {
+                *current_area -= 1;
             }
             None => panic!("Index {} already has no area", index),
             _ => {}
