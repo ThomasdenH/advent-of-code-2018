@@ -22,9 +22,9 @@ dependencies = [
 
 [[package]]
 name = "aoc-runner"
-version = "0.2.2"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e34a27977323a869e1c2c1d795dd25611caafeec0d121f57bb0b7630a639cd30"
+checksum = "d21ef9204ad206a5a3e918e9920da04e1118ad91ce4f23570be964b9d6b9dfcb"
 
 [[package]]
 name = "aoc-runner-derive"
