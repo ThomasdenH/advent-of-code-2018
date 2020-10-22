@@ -34,6 +34,78 @@ fn test_input_generator() {
     );
 }
 
+pub struct RingEntry<T> {
+    previous: usize,
+    next: usize,
+    value: T,
+}
+
+pub struct Ring<T> {
+    entries: Vec<Option<RingEntry<T>>>,
+    empty: Vec<usize>,
+    current_index: Option<usize>,
+}
+
+impl<T> Ring<T> {
+    pub fn current_value(&self) -> Option<&T> {
+        if let Some(current_index) = self.current_index {
+            Some(&self.entries[current_index].as_ref().unwrap().value)
+        } else {
+            None
+        }
+    }
+
+    pub fn move_forwards(&mut self) {
+        let current_index = self.current_index.unwrap();
+        self.current_index = Some(self.entries[current_index].as_ref().unwrap().next)
+    }
+
+    pub fn move_backwards(&mut self) {
+        let current_index = self.current_index.unwrap();
+        self.current_index = Some(self.entries[current_index].as_ref().unwrap().previous)
+    }
+
+    pub fn move_n(&mut self, n: isize) {
+        if n > 0 {
+            for _ in 0..n {
+                self.move_forwards()
+            }
+        } else if n < 0 {
+            for _ in 0..(-n) {
+                self.move_backwards()
+            }
+        }
+    }
+
+    pub fn remove(&mut self) -> T {
+        let current_index = self.current_index.expect("remove on empty ring");
+        let entry = self.entries[current_index].take().expect("no entry");
+        self.empty.push(current_index);
+        if let Some(previous_entry) = self.entries[entry.previous] {
+            previous_entry.next = entry.next;
+        }
+        if let Some(next_entry) = self.entries[entry.next] {
+            previous_entry.previous = entry.previous;
+        }
+        self.current_index = Some(entry.next);
+        entry.value
+    }
+
+    pub fn add(&mut self, value: T) {
+        let location_to_insert = self.empty.pop();
+        if let Some(current_index) = self.current_index {
+            let old_entry = self.entries[current_index].unwrap();
+            let entry = RingEntry {
+                previous: current_index,
+                next: old_entry.next,
+                value
+            };
+        } else {
+            let entry = RingEntry
+        }
+    }
+}
+
 #[derive(Default, Debug)]
 struct Board {
     board: Vec<u32>,
