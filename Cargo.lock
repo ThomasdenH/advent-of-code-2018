@@ -28,14 +28,14 @@ checksum = "e34a27977323a869e1c2c1d795dd25611caafeec0d121f57bb0b7630a639cd30"
 
 [[package]]
 name = "aoc-runner-derive"
-version = "0.2.2"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "696802dfe4dd87aa979f63a9e46ae98a31b5eb3d7aff5071de426e9bb3d1cfd2"
+checksum = "ba8b944269d3fee645d281b1335e1797044db497bb02d0098cc3fdb8900069cc"
 dependencies = [
  "aoc-runner-internal",
- "proc-macro2 0.4.24",
- "quote 0.6.10",
- "syn 0.15.23",
+ "proc-macro2 1.0.24",
+ "quote 1.0.7",
+ "syn 1.0.44",
 ]
 
 [[package]]
